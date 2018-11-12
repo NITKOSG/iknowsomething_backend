@@ -1,5 +1,7 @@
-const router = require('express').Router();
-const passport = require('passport');
+import express from 'express';
+import passport from 'passport';
+
+router = express.Router();
 
 // login
 router.get('/login', (req, res) => {
@@ -29,9 +31,13 @@ router.get(
 );
 
 // FB callback
-router.get('/login/facebook/redirect', passport.authenticate('facebook'), (req, res) => {
-  console.log('User has logged out');
-  res.redirect('/dashboard');
-});
+router.get(
+  '/login/facebook/redirect',
+  passport.authenticate('facebook'),
+  (req, res) => {
+    console.log('User has logged out');
+    res.redirect('/dashboard');
+  }
+);
 
-module.exports = router;
+export default router;

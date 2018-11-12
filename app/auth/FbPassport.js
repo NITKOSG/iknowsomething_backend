@@ -1,9 +1,11 @@
 // Strategy for fb
 
-const passport = require('passport');
-const keys = require("../../keys");
-const User = require("../models/user-model");
-const FacebookStrategy = require('passport-facebook').FacebookStrategy;
+import passport from 'passport';
+import FbPassport from 'passport-facebook';
+import keys from '../../keys';
+import User from '../models/user-model';
+
+const FacebookStrategy = FbPassport.FacebookStrategy;
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
@@ -22,8 +24,9 @@ passport.use(
     {
       clientID: keys.FB_keys.clientId,
       clientSecret: keys.FB_keys.clientSecret,
-      callbackURL: 'http://localhost:3000/login/facebook/redirect',
-    }, (accessToken, RefreshToken, profile, email, done) => {
+      callbackURL: 'http://localhost:3000/login/facebook/redirect'
+    },
+    (accessToken, RefreshToken, profile, email, done) => {
       // check for already existing user
       User.findOne({ facebookId: profile.id }).then((currentUser) => {
         if (currentUser) {
@@ -33,17 +36,22 @@ passport.use(
         } else {
           // new User creation
           new User({
-            fullName: profile.first_name + " " + profile.middle_name  + " " + profile.last_name,
+            fullName:
+              profile.first_name +
+              ' ' +
+              profile.middle_name +
+              ' ' +
+              profile.last_name,
             facebookId: profile.id,
-            email: email,
+            email: email
           })
             .save()
             .then((newUser) => {
-              console.log('New User is :' + newUser);
+              console.log('New User logged in :' + newUser);
               done(null, newUser);
             });
         }
       });
-    },
-  ),
+    }
+  )
 );

@@ -1,4 +1,4 @@
-const router = require('express').Router();
+import express from 'express';
 
 const authCheck = (req, res, next) => {
   if (!req.user) {
@@ -15,4 +15,4 @@ router.get('/', /*authCheck after passing user in dashboard.ejs*/, (req, res) =>
   res.send('This is dashboard page');
 });
 
-module.exports = router;
+export default router;
