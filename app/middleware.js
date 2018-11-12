@@ -40,11 +40,7 @@ const middleware = (app) => {
       secret: configServer.app.SESSION_SECRET,
       store: new Filestore({ ttl: 7200 }),
       resave: true,
-      saveUninitialized: false,
-      cookie: {
-        secure: false, //temporarily
-        maxAge: 24 * 60 * 60 * 1000
-      }
+      saveUninitialized: false
     })
   );
 
