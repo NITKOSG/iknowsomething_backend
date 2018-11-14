@@ -38,7 +38,7 @@ const middleware = (app) => {
     expressSession({
       name: 'SESS_ID',
       secret: configServer.app.SESSION_SECRET,
-      store: new Filestore({ ttl: 7200 }),
+      store: new Filestore({ path: './sessions' }),
       resave: true,
       saveUninitialized: false
     })

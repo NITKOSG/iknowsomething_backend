@@ -1,9 +1,9 @@
 // This is the schema that would be followed
-import mongooge from 'mongoose';
+import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const userschema = new Schema({
+const UserSchema = new Schema({
   fullName: String,
   userName: String,
   email: String,
@@ -12,5 +12,5 @@ const userschema = new Schema({
   gender: String
 });
 
-const User = mongoose.model('user', userschema);
+const User = mongoose.model('user', UserSchema);
 export default User;
