@@ -3,6 +3,7 @@ import config from './config';
 import MongoConnect from './app/mongoose';
 import AppRoutes from './app/routes';
 import { middleware } from './app/middleware';
+import FBpassport from './app/auth/FbPassport';
 
 addPath(__dirname);
 
