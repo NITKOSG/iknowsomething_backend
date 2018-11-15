@@ -4,6 +4,7 @@ import MongoConnect from './app/mongoose';
 import AppRoutes from './app/routes';
 import { middleware } from './app/middleware';
 import FBpassport from './app/auth/FbPassport';
+import GooglePassport from './app/auth/GooglePassport';
 
 addPath(__dirname);
 

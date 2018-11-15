@@ -1,32 +1,30 @@
-// Strategy for fb
+//Strategy for google
 
 import passport from 'passport';
-import FbPassport from 'passport-facebook';
+import GoogleStrategy from 'passport-google-oauth20';
 import keys from '../../keys';
 import User from '../models/user-model';
-
-const FacebookStrategy = FbPassport.FacebookStrategy;
 
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
+passport.deserializeUser((id) => {
   User.findById(id).then((user) => {
     done(null, user);
   });
 });
 
-// Facebook strategy
+// Google Strategy
 
 passport.use(
-  new FacebookStrategy(
+  new GoogleStrategy(
     {
-      clientID: keys.FbKeys.clientId,
-      clientSecret: keys.FbKeys.clientSecret,
-      callbackURL: 'http://localhost:3000/login/facebook/redirect',
+      clientID: keys.GoogleKeys.clientId,
+      clientSecret: keys.GoogleKeys.clientSecret,
+      callbackURL: 'http://localhost:3000/login/google/redirect',
     },
-    (accessToken, RefreshToken, profile, email, done) => {
+    (accessToken, refreshToken, profile, done) => {
       // check for already existing user
       User.findOne({ facebookId: profile.id }).then((currentUser) => {
         if (currentUser) {
@@ -36,9 +34,9 @@ passport.use(
         } else {
           // new User creation
           new User({
-            fullName: `${profile.first_name} ${profile.middle_name} ${profile.last_name}`,
-            facebookId: profile.id,
-            email,
+            username: profile.displayName,
+            googleId: profile.id,
+            gender: profile.gender,
           })
             .save()
             .then((newUser) => {
@@ -47,6 +45,6 @@ passport.use(
             });
         }
       });
-    },
+    }
   ),
 );
