@@ -1,6 +1,6 @@
-import index from './app/routes/index';
-import dashboard from './app/routes/dashboard';
-import auth from './app/routes/auth';
+import index from './routes/index';
+import dashboard from './routes/dashboard';
+import auth from './routes/auth';
 
 const router = (app) => {
   app.use('/', index);

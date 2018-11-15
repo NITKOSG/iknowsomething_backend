@@ -9,7 +9,7 @@ const UserSchema = new Schema({
   email: String,
   googleId: String,
   facebookId: String,
-  gender: String
+  gender: String,
 });
 
 const User = mongoose.model('user', UserSchema);
