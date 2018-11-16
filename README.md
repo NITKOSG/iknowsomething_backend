@@ -4,8 +4,8 @@ This would be a social network for nit kkr where students can react out to other
 
 # Blog System!
 
-  - It will give students opportunity of their success or failure with everyone.
-  - It will help students to write on a technology or a sudo research papers where they can get reviews or appreciated by others.
+  - It will give students opportunity to share their success or failure with everyone.
+  - It will help students to write on a technology or a pseudo research papers where they can get reviews or appreciated by others.
   - It will be a new way to publish their write ups or content for magazines clubs.
 
 
