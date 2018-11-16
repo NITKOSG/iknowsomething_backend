@@ -7,6 +7,28 @@ const BlogSchema = mongoose.Schema({
     required: true,
   },
 
+  reactions: [{
+    reactionType: {
+      type: String,
+      required: true,
+    },
+    count: {
+      type: String,
+      required: true,
+    },
+  }],
+
+  comments: [{
+    content: {
+      type: String,
+      required: true,
+    },
+    userId: {
+      type: String,
+      required: true,
+    },
+  }],
+
   created_at: {
     type: Date,
     default: new Date(),
