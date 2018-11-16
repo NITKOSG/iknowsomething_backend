@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   User.find({}, (err, users) => {
     if (err) {
-      logger.err(err);
+      logger.error(err);
       res.json({
         success: false,
         err,
@@ -22,6 +22,59 @@ router.get('/', (req, res) => {
         data: {
           users,
         },
+      });
+    }
+  });
+});
+
+router.get('/:id', (req, res) => {
+  User.find({}, (err, user) => {
+    if (err) {
+      logger.error(err);
+      res.json({
+        success: false,
+        err,
+      });
+    } else {
+      res.json({
+        success: true,
+        data: {
+          user,
+        },
+      });
+    }
+  });
+});
+
+router.put('/:id', (req, res) => {
+  User.findByIdAndUpdate(req.params.id, (err) => {
+    if (err) {
+      logger.error(err);
+      res.json({
+        success: false,
+        err,
+      });
+    } else {
+      res.json({
+        success: true,
+        msg: 'user updated successfully.',
+      });
+    }
+  });
+});
+
+router.delete('/:id', (req, res) => {
+  User.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      logger.error(err);
+      res.json({
+        success: false,
+        err,
+      });
+    } else {
+      res.json({
+        success: true,
+        msg: 'user deleted successfully.',
       });
     }
   });
