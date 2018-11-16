@@ -7,6 +7,7 @@ yarn-error.log*
 devLog/
 
 config.js
+.vscode
 
 # Runtime data
 pids

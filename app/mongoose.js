@@ -26,7 +26,6 @@ const MongoConnect = () => {
     });
   });
 
-  global.db = db;
   return db;
 };
 
