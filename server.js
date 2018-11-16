@@ -2,15 +2,11 @@ import express from 'express';
 import config from './config';
 import MongoConnect from './app/mongoose';
 import AppRoutes from './app/routes';
-import { middleware } from './app/middleware';
-import FBpassport from './app/auth/FbPassport';
-import GooglePassport from './app/auth/GooglePassport';
-
-addPath(__dirname);
+import middleware from './app/middleware';
 
 const app = express();
 // ---------------------------------------------//
-// invoke routes, MIddleware, Mongo connect here
+// invoke routes, Middleware, Mongo connect here
 MongoConnect();
 middleware(app);
 AppRoutes(app);
