@@ -5,6 +5,7 @@ import {
   logger,
 } from '../../../log';
 import User from '../../models/user';
+import ResponseTemplate from '../../global/templates/response';
 
 const router = express.Router();
 
@@ -12,17 +13,9 @@ router.get('/', (req, res) => {
   User.find({}, (err, users) => {
     if (err) {
       logger.error(err);
-      res.json({
-        success: false,
-        err,
-      });
+      res.status(401).json(ResponseTemplate.error(401, err));
     } else {
-      res.json({
-        success: true,
-        data: {
-          users,
-        },
-      });
+      res.json(ResponseTemplate.success('success', { users }));
     }
   });
 });

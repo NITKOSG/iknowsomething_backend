@@ -9,48 +9,9 @@ import googleAuth from './googleLogin';
 import facebookAuth from './facebookLogin';
 import User from '../../models/user';
 import config from '../../../config';
+import ResponseTemplate from '../../global/templates/response';
 
 const router = express.Router();
-
-/**
- * @swagger
- * /auth/login:
- *   post:
- *     parameters:
- *       - in: body
- *         name: login credentials
- *         required: true
- *         description: for user login or signup
- *         schema:
- *           type: object
- *           properties:
- *              id_token:
- *                type: string
- *              provider:
- *                type: string
- *     tags:
- *       - auth
- *     description: Creates new player or login
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: Player Logged in
- *         schema:
- *           type: object
- *           properties:
- *              success:
- *                 type: boolean
- *              data:
- *                 type: object
- *                 properties:
- *                    token:
- *                       type: string
- *       400:
- *         description: User already exists
- *       401:
- *         description: Unauthorised request
- */
 
 router.post('/login', (req, res) => {
   const loginData = req.body;
@@ -108,8 +69,8 @@ router.post('/login', (req, res) => {
       const token = jwt.sign({
         user,
       }, config.app.WEB_TOKEN_SECRET, {
-          expiresIn: config.app.jwt_expiry_time,
-        });
+        expiresIn: config.app.jwt_expiry_time,
+      });
 
       return callback(null, token);
     },
@@ -117,17 +78,11 @@ router.post('/login', (req, res) => {
 
   async.waterfall(tasks, (err, response) => {
     if (err) {
-      res.status(401).json({
-        err,
-        success: false,
-      });
+      res.status(401).json(ResponseTemplate.error(401, err));
     } else {
-      res.status(200).json({
-        success: true,
-        data: {
-          token: response,
-        },
-      });
+      res.status(200).json(ResponseTemplate.success('successfully logged in', {
+        token: response,
+      }));
     }
   });
 });

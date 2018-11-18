@@ -1,0 +1,99 @@
+/users:
+  get:
+    tags:
+      - users
+    description: To fetch all the registered user
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Contains all registered Users
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+            data:
+              type: object
+              properties:
+                users: 
+                  type: object
+/users/{userId}:
+  get:
+    parameters:
+      - in: path
+        name: userId
+        schema: 
+          type: integer
+        required: true
+        description: Numeric ID of the user to get
+
+    tags: 
+     - users
+    description: To fetch a specifDelete the specified useric user
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Contains a specific user
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+            message:
+              type: string
+            data:
+              type: object
+              properties:
+                users:
+                  type: object
+  put: 
+    parameters:
+      - in: path
+        name: userId
+        schema: 
+          type: integer
+        required: true
+        description: Numeric Id of user
+    tags:
+      - users
+    description: To update a existing user
+    produces:
+      -	application/json
+    responses:
+      200:
+        description: Contains updated user 
+        schema: 
+          type: object
+          properties:
+            success: 
+              type: boolean
+            message: 
+              type: string
+            data:
+              type: object
+              properties:
+                user:
+                  type: object
+  delete:
+    parameters:
+      - in: path
+        name: userId
+        description: Numeric id of user
+        required: true
+    tags:
+      - users
+    description: To delete a particular user
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Successfully deleted
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+            message:
+              type: string

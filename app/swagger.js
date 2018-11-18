@@ -6,7 +6,7 @@ const swagger = (app) => {
     info: {
       title: 'I Know Something API DOCS',
       version: '0.0.1',
-      description: 'Demonstrating how to describe a RESTful API with Swagger',
+      description: 'Demonstrating the RESTFul API of I Know Something',
     },
     host: 'localhost:8000',
     basePath: '/',
@@ -25,7 +25,7 @@ const swagger = (app) => {
     swaggerDefinition,
     securityDefinitions,
     // path to the API docs
-    apis: ['./**/**/routes/*/*', './**/**/models/*'],
+    apis: ['./**/**/swagger/routes/*.yml', './**/**/swagger/models/*.yml'],
   };
 
   // initialize swagger-jsdoc
