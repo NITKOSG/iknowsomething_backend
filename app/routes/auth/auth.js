@@ -6,7 +6,6 @@ import {
 } from '../../../log';
 import authController from './authController';
 import googleAuth from './googleLogin';
-import facebookAuth from './facebookLogin';
 import User from '../../models/user';
 import config from '../../../config';
 import ResponseTemplate from '../../global/templates/response';
@@ -19,25 +18,20 @@ router.post('/login', (req, res) => {
 
     // Verifying token of the user
     (callback) => {
-      if (loginData.provider === 'google') {
-        googleAuth.verify(loginData, (err, user) => {
-          if (err) {
-            logger.error(err);
-            return callback(err, null);
-          }
-          return callback(null, user);
-        });
-      } else if (loginData.provider === 'facebook') {
-        facebookAuth.verify(loginData, (err, user) => {
-          if (err) {
-            logger.error(err);
-            return callback(err, null);
-          }
-          return callback(null, user);
-        });
-      } else {
-        return callback('provider not given', null);
+      googleAuth.verify(loginData, (err, user) => {
+        if (err) {
+          logger.error(err);
+          return callback(err, null);
+        }
+        return callback(null, user);
+      });
+    },
+
+    (user, callback) => {
+      if (user.email.split('@')[1] !== 'nitkkr.ac.in') {
+        return callback('Use Nit KKR domain email only', null);
       }
+      return callback(null, user);
     },
 
     // Checking the user in database amd further processing

@@ -1,5 +1,7 @@
 import User from '../../models/user';
-import { logger } from '../../../log';
+import {
+  logger,
+} from '../../../log';
 
 const createUser = (user, callback) => {
   const userData = new User(user);
