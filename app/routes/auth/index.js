@@ -6,7 +6,6 @@ import {
 } from '../../../log';
 import authController from './authController';
 import googleAuth from './googleLogin';
-import facebookAuth from './facebookLogin';
 import User from '../../models/user';
 import config from '../../../config';
 
@@ -58,17 +57,13 @@ router.post('/login', (req, res) => {
 
     // Verifying token of the user
     (callback) => {
-      if (loginData.provider === 'google') {
-        googleAuth.verify(loginData, (err, user) => {
-          if (err) {
-            logger.error(err);
-            return callback(err, null);
-          }
-          return callback(null, user);
-        });
-      } else {
-        return callback('provider not given', null);
-      }
+      googleAuth.verify(loginData, (err, user) => {
+        if (err) {
+          logger.error(err);
+          return callback(err, null);
+        }
+        return callback(null, user);
+      });
     },
 
     (user, callback) => {
