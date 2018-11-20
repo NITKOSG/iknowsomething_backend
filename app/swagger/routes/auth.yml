@@ -1,0 +1,38 @@
+/auth/login:
+  post:
+    parameters:
+      - in: body
+        name: login credentials
+        required: true
+        description: for user login or signup
+        schema:
+          type: object
+          properties:
+            token:
+              type: string
+            provider:
+              type: string
+    tags:
+      - auth
+    description: For log or creating new user if not existing
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Successfully Logged In
+        schema:
+          type: object
+          properties:
+            success:
+                type: boolean
+            message: 
+              type: string
+            data:
+                type: object
+                properties:
+                  token:
+                      type: string
+      400:
+        description: User already exists
+      401:
+        description: Unauthorised request

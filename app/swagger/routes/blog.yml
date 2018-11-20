@@ -1,0 +1,51 @@
+/blog:
+  get:
+    tags:
+      - blog
+    description: For Fetching all blogs
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Successfully Fetched all blogs
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+            message:
+              type: string
+            data: 
+              type: object
+              properties:
+                blogs:
+                  type: object
+  post:
+    parameters:
+      - in: body
+        name: blog data
+        description: for creating new blog
+        schema:
+          type: object
+          properties:
+            name: string
+    tags:
+      - blog
+    description: for creaing new blog
+    produces:
+      - application/json
+    responses:
+      200:
+        description: Successfully created new blog
+        schema:
+          type: object
+          properties:
+            success:
+              type: boolean
+            message: 
+              type: string
+            data:
+              type: object
+              properties:
+                blog:
+                  type: object

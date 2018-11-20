@@ -10,4 +10,7 @@ module.exports = {
 	extends: [
 		'airbnb-bundle',
 	],
+	rules: {
+		"no-underscore-dangle": [2, { "allow": ['_id'] }]
+	}
 };
