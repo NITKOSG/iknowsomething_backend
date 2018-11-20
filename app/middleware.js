@@ -8,7 +8,9 @@ import CsrfMiddleware from './global/middlewares/csrfMidlleware';
 import EmptyContentMiddleware from './global/middlewares/EmptyContent';
 import ContentTypeMiddleware from './global/middlewares/ContentType';
 import configServer from '../config';
-import { stream } from '../log';
+import {
+  stream,
+} from '../log';
 
 // const Filestore = sessionStore(expressSession);
 
@@ -27,10 +29,7 @@ const middleware = (app) => {
   app.use(helmet.xssFilter()); // set X-XSS-Protection header
   app.enable('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
   app.use(
-    cors({
-      origin: 'http://localhost:3000',
-      credentials: true,
-    }),
+    cors(),
   );
 
   app.use(
