@@ -29,7 +29,7 @@ router.post('/login', (req, res) => {
 
     (user, callback) => {
       if (user.email.split('@')[1] !== 'nitkkr.ac.in') {
-        return callback('Use Nit KKR domain email only', null);
+        return callback('Use NIT KKR domain email only', null);
       }
       return callback(null, user);
     },
@@ -44,7 +44,9 @@ router.post('/login', (req, res) => {
           return callback(err, null);
         }
         if (!usr) {
-          authController.createUser(usr, (err1, newUser) => {
+          // eslint-disable-next-line
+          user.rollNo = user.email.split('@')[0].split('_')[1];
+          authController.createUser(user, (err1, newUser) => {
             if (err1) {
               logger.error(err1);
               return callback(err1, null);
