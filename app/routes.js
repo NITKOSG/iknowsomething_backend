@@ -7,7 +7,7 @@ import ValidAuthToken from './global/middlewares/ValidAuthToken';
 const router = (app) => {
   app.use('/auth', auth);
   app.use('/users', user);
-  app.use('/blog', ValidAuthToken, blog);
+  app.use('/blog', blog);
 };
 
 export default router;
