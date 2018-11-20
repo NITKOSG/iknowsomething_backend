@@ -66,17 +66,16 @@ router.post('/login', (req, res) => {
           }
           return callback(null, user);
         });
-      } else if (loginData.provider === 'facebook') {
-        facebookAuth.verify(loginData, (err, user) => {
-          if (err) {
-            logger.error(err);
-            return callback(err, null);
-          }
-          return callback(null, user);
-        });
       } else {
         return callback('provider not given', null);
       }
+    },
+
+    (user, callback) => {
+      if (user.email.split('@')[1] !== 'nitkkr.ac.in') {
+        return callback('Use Nit KKR domain email only', null);
+      }
+      return callback(null, user);
     },
 
     // Checking the user in database amd further processing
@@ -108,8 +107,8 @@ router.post('/login', (req, res) => {
       const token = jwt.sign({
         user,
       }, config.app.WEB_TOKEN_SECRET, {
-          expiresIn: config.app.jwt_expiry_time,
-        });
+        expiresIn: config.app.jwt_expiry_time,
+      });
 
       return callback(null, token);
     },
