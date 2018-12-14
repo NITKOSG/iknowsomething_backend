@@ -6,9 +6,7 @@
   "scripts": {
     "dev_gen": "NODE_ENV='dev' GEN_DOC='true' nodemon --ignore '*.json' app.js",
     "dev": "NODE_ENV='dev' GEN_DOC='false' nodemon --ignore '*.json' app.js",
-    "dev_win": "set NODE_ENV=dev&&gulp",
-    "prod": "NODE_ENV='prod' pm2 start app.js --name backend",
-    "prod_win": "set NODE_ENV=prod&&gulp"
+    "prod": "NODE_ENV='prod' pm2 start app.js --name backend"
   },
   "author": "war-turtle",
   "license": "MIT",
