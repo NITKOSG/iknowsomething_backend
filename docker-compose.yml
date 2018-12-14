@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: warturtle/iks-backend
+    volumes:
+      - /app/node_modules
+      - .:/app
+    ports:
+      - 8000:8000
+  mongo:
+    image: mongo
+    volumes:
+      - storedData:/data/db
+      - configData:/data/configdb
+volumes:
+  storedData:
+  configData:
