@@ -9,6 +9,10 @@ const QuestionPaperSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  degree: {
+    type: String,
+    required: true,
+  },
   semester: {
     type: Number,
     required: true,
