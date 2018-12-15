@@ -9,7 +9,7 @@ const QuestionPaperSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  degree: {
+  course: {
     type: String,
     required: true,
   },
