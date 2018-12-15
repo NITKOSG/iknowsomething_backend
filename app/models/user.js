@@ -37,6 +37,14 @@ const UserSchema = mongoose.Schema({
     type: Number,
   },
 
+  course: {
+    type: String,
+  },
+
+  branch: {
+    type: String,
+  },
+
   dateOfBirth: {
     type: Date,
   },

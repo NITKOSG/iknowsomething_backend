@@ -1,6 +1,7 @@
 import express from 'express';
 import async from 'async';
 import jwt from 'jsonwebtoken';
+import { decode } from 'punycode';
 import {
   logger,
 } from '../../../log';
@@ -79,6 +80,30 @@ router.post('/login', (req, res) => {
       res.status(200).json(ResponseTemplate.success('successfully logged in', {
         token: response,
       }));
+    }
+  });
+});
+
+router.post('/onboard', (req, res) => {
+  jwt.verify(req.body.data.token, config.app.WEB_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      res.json(ResponseTemplate.error(401, 'Invalid User'));
+    } else {
+      User.findByIdAndUpdate(decoded.user._id, {
+        $set: {
+          name: `${req.body.data.firstName} ${req.body.data.lastName}`,
+          onboard: true,
+          username: req.body.data.username,
+          phone: req.body.data.number,
+          branch: req.body.data.branch.split('_')[1],
+          course: req.body.data.branch.split('_')[0],
+        },
+      }, (error, modifiedUser) => {
+        if (error) {
+          res.json(ResponseTemplate.error(401, 'Some error occurred while onboarding'));
+        }
+        res.json(ResponseTemplate.success('On boarded successfully'));
+      });
     }
   });
 });
