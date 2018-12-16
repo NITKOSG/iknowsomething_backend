@@ -1,7 +1,6 @@
 import express from 'express';
 import async from 'async';
 import jwt from 'jsonwebtoken';
-import { decode } from 'punycode';
 import {
   logger,
 } from '../../../log';

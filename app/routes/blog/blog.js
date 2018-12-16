@@ -1,9 +1,11 @@
 import express from 'express';
-import async from 'async';
+import jwt from 'jsonwebtoken';
+import ResponseTemplate from '../../global/templates/response';
 import {
   logger,
 } from '../../../log';
 import Blog from '../../models/blog';
+import config from '../../../config';
 
 const router = express.Router();
 
@@ -27,18 +29,23 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const blog = new Blog(req.body);
-  blog.save((err) => {
+  const { data } = req.body;
+
+  jwt.verify(data.token, config.app.WEB_TOKEN_SECRET, (err, decoded) => {
     if (err) {
-      logger.error(err);
-      res.json({
-        success: false,
-        err,
-      });
+      res.json(ResponseTemplate.error(401, 'Invalid User'));
     } else {
-      res.json({
-        success: true,
-        msg: 'Blog created successfully',
+      const blog = new Blog();
+      blog.userId = decoded.user._id;
+      blog.blogTitle = data.title;
+      blog.blogContent = data.content;
+      blog.save((error) => {
+        if (error) {
+          logger.error(err);
+          res.json(ResponseTemplate.error(401, 'Some error occured while saving the blog'));
+        } else {
+          res.json(ResponseTemplate.success('Blog created Successfully'));
+        }
       });
     }
   });
