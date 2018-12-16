@@ -88,6 +88,8 @@ router.post('/onboard', (req, res) => {
   jwt.verify(req.body.data.token, config.app.WEB_TOKEN_SECRET, (err, decoded) => {
     if (err) {
       res.json(ResponseTemplate.error(401, 'Invalid User'));
+    } else if (decoded.user.onboard) {
+      res.json(ResponseTemplate.success('You have been boarded before.'));
     } else {
       User.findByIdAndUpdate(decoded.user._id, {
         $set: {
@@ -102,7 +104,12 @@ router.post('/onboard', (req, res) => {
         if (error) {
           res.json(ResponseTemplate.error(401, 'Some error occurred while onboarding'));
         }
-        res.json(ResponseTemplate.success('On boarded successfully'));
+        const token = jwt.sign({
+          user: modifiedUser,
+        }, config.app.WEB_TOKEN_SECRET, {
+          expiresIn: config.app.jwt_expiry_time,
+        });
+        res.json(ResponseTemplate.success('On boarded successfully', { token }));
       });
     }
   });
