@@ -2,6 +2,16 @@ import mongoose from 'mongoose';
 
 const BlogSchema = mongoose.Schema({
 
+  userId: {
+    type: String,
+    required: true,
+  },
+
+  blogTitle: {
+    type: String,
+    required: true,
+  },
+
   blogContent: {
     type: String,
     required: true,
