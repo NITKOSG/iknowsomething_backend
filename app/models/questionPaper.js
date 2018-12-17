@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 
 const QuestionPaperSchema = mongoose.Schema({
   userId: {
-    type: String,
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
   imageUrl: {
     type: String,

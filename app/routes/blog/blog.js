@@ -10,22 +10,29 @@ import config from '../../../config';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  Blog.find({}, (err, blogs) => {
-    if (err) {
-      logger.error(err);
-      res.json({
-        success: false,
-        err,
-      });
-    } else {
-      res.json({
-        success: true,
-        data: {
-          blogs,
-        },
-      });
-    }
-  });
+  const pageNo = req.query.page;
+  const perPage = 10;
+  Blog
+    .find({})
+    .skip((pageNo - 1) * perPage)
+    .limit(perPage)
+    .populate('userId')
+    .exec((err, blogs) => {
+      if (err) {
+        logger.error(err);
+        res.json(ResponseTemplate.error(401, 'Error while fetching the blogs'));
+      } else {
+        res.json(ResponseTemplate.success('Blog fetched successfully', { blogs }));
+      }
+    });
+  // Blog.find({}, null, { limit: perPage, skip: (pageNo - 1) * perPage }, (err, blogs) => {
+  //   if (err) {
+  //     logger.error(err);
+  //     res.json(ResponseTemplate.error(401, 'Error while fetching the blogs'));
+  //   } else {
+  //     res.json(ResponseTemplate.success('Blog fetched successfully', { blogs }));
+  //   }
+  // });
 });
 
 router.post('/', (req, res) => {
