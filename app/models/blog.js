@@ -17,14 +17,10 @@ const BlogSchema = mongoose.Schema({
     required: true,
   },
 
-  reactions: [{
-    reactionType: {
-      type: String,
-      required: true,
-    },
-    count: {
-      type: String,
-      required: true,
+  likes: [{
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
   }],
 
@@ -34,8 +30,12 @@ const BlogSchema = mongoose.Schema({
       required: true,
     },
     userId: {
-      type: String,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+    timestamp: {
+      type: Date,
+      default: new Date(),
     },
   }],
 

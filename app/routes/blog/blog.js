@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import async from 'async';
 import ResponseTemplate from '../../global/templates/response';
 import {
   logger,
@@ -22,7 +23,9 @@ router.get('/', (req, res) => {
         logger.error(err);
         res.json(ResponseTemplate.error(401, 'Error while fetching the blogs'));
       } else {
-        res.json(ResponseTemplate.success('Blog fetched successfully', { blogs }));
+        res.json(ResponseTemplate.success('Blog fetched successfully', {
+          blogs,
+        }));
       }
     });
   // Blog.find({}, null, { limit: perPage, skip: (pageNo - 1) * perPage }, (err, blogs) => {
@@ -36,7 +39,9 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { data } = req.body;
+  const {
+    data,
+  } = req.body;
 
   jwt.verify(data.token, config.app.WEB_TOKEN_SECRET, (err, decoded) => {
     if (err) {
@@ -59,26 +64,75 @@ router.post('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  Blog.findById(req.params.id, (err, blog) => {
-    if (err) {
-      logger.error(err);
-      res.json({
-        success: false,
-        err,
-      });
-    } else {
-      res.json({
-        success: true,
-        data: {
-          blog,
-        },
-      });
-    }
-  });
+  Blog.findById(req.params.id)
+    .populate('userId')
+    .exec((err, blog) => {
+      if (err) {
+        logger.error(err);
+        res.json({
+          success: false,
+          err,
+        });
+      } else {
+        res.json({
+          success: true,
+          data: {
+            blog,
+          },
+        });
+      }
+    });
 });
 
 router.put('/:id', (req, res) => {
-  Blog.findByIdAndUpdate(req.params.id, (err) => {
+  console.log(req.user);
+  const task = [
+    (callback) => {
+      Blog.findByIdAndUpdate(req.params.id, {
+        $push: {
+          likes: {
+            userId: req.user._id,
+          },
+        },
+      }, (err, result) => {
+        if (err) {
+          return callback(err, null);
+        }
+        return callback(null, result);
+      });
+    },
+  ];
+
+  const task1 = [
+    (callback) => {
+      Blog.findByIdAndUpdate(req.params.id, {
+        $push: {
+          comments: {
+            content: req.body.commentContent,
+            userId: req.user._id,
+          },
+        },
+      }, (err, result) => {
+        if (err) {
+          return callback(err, null);
+        }
+        return callback(null, result);
+      });
+    },
+  ];
+
+  const taskDecide = (action) => {
+    switch (action) {
+      case 'LIKE':
+        return task;
+      case 'COMMENT':
+        return task1;
+      default:
+        return null;
+    }
+  };
+
+  async.waterfall(taskDecide(req.query.action), (err, result) => {
     if (err) {
       logger.error(err);
       res.json({
@@ -87,8 +141,7 @@ router.put('/:id', (req, res) => {
       });
     } else {
       res.json({
-        success: true,
-        msg: 'blog updated successfully.',
+        result,
       });
     }
   });
