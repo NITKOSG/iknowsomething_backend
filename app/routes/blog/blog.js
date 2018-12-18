@@ -59,7 +59,7 @@ router.post('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  Blog.find({}, (err, blog) => {
+  Blog.findById(req.params.id, (err, blog) => {
     if (err) {
       logger.error(err);
       res.json({
