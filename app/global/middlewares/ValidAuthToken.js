@@ -5,7 +5,7 @@ import User from '../../models/user';
 import { logger } from '../../../log';
 
 const ValidAuthToken = (req, res, next) => {
-  const token = req.headers.authorization;
+  const token = (req.headers.authorization).split(' ')[1];
   if (token) {
     jwt.verify(token, configServer.app.WEB_TOKEN_SECRET, (err, decodedUser) => {
       if (err) {

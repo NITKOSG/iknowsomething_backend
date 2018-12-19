@@ -1,12 +1,10 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import async from 'async';
 import ResponseTemplate from '../../global/templates/response';
 import {
   logger,
 } from '../../../log';
 import Blog from '../../models/blog';
-import config from '../../../config';
 
 const router = express.Router();
 
@@ -28,14 +26,20 @@ router.get('/', (req, res) => {
         }));
       }
     });
-  // Blog.find({}, null, { limit: perPage, skip: (pageNo - 1) * perPage }, (err, blogs) => {
-  //   if (err) {
-  //     logger.error(err);
-  //     res.json(ResponseTemplate.error(401, 'Error while fetching the blogs'));
-  //   } else {
-  //     res.json(ResponseTemplate.success('Blog fetched successfully', { blogs }));
-  //   }
-  // });
+});
+
+router.get('/:id', (req, res) => {
+  Blog.findById(req.params.id)
+    .populate('userId')
+    .populate('comments.userId')
+    .exec((err, blog) => {
+      if (err) {
+        logger.error(err);
+        res.json(ResponseTemplate.error('Some Error Occured'));
+      } else {
+        res.json(ResponseTemplate.success('Blog Fetched Successfully', { blog }));
+      }
+    });
 });
 
 router.post('/', (req, res) => {
@@ -43,62 +47,48 @@ router.post('/', (req, res) => {
     data,
   } = req.body;
 
-  jwt.verify(data.token, config.app.WEB_TOKEN_SECRET, (err, decoded) => {
-    if (err) {
-      res.json(ResponseTemplate.error(401, 'Invalid User'));
+  const blog = new Blog();
+  blog.userId = req.user._id;
+  blog.blogTitle = data.title;
+  blog.blogContent = data.content;
+  blog.save((error) => {
+    if (error) {
+      logger.error(error);
+      res.json(ResponseTemplate.error(401, 'Some error occured while saving the blog'));
     } else {
-      const blog = new Blog();
-      blog.userId = decoded.user._id;
-      blog.blogTitle = data.title;
-      blog.blogContent = data.content;
-      blog.save((error) => {
-        if (error) {
-          logger.error(err);
-          res.json(ResponseTemplate.error(401, 'Some error occured while saving the blog'));
-        } else {
-          res.json(ResponseTemplate.success('Blog created Successfully'));
-        }
-      });
+      res.json(ResponseTemplate.success('Blog created Successfully'));
     }
   });
 });
 
-router.get('/:id', (req, res) => {
-  Blog.findById(req.params.id)
-    .populate('userId')
-    .exec((err, blog) => {
-      if (err) {
-        logger.error(err);
-        res.json({
-          success: false,
-          err,
-        });
-      } else {
-        res.json({
-          success: true,
-          data: {
-            blog,
-          },
-        });
-      }
-    });
-});
-
 router.put('/:id', (req, res) => {
-  console.log(req.user);
   const task = [
     (callback) => {
-      Blog.findByIdAndUpdate(req.params.id, {
-        $push: {
-          likes: {
-            userId: req.user._id,
-          },
+      Blog.findOneAndUpdate({ _id: req.params.id, 'likes.userId': req.user._id }, {
+        $inc: {
+          'likes.$.count': 1,
         },
-      }, (err, result) => {
+      }, { new: true }, (err, result) => {
         if (err) {
           return callback(err, null);
         }
-        return callback(null, result);
+        if (result == null) {
+          Blog.findByIdAndUpdate(req.params.id, {
+            $push: {
+              likes: {
+                count: 1,
+                userId: req.user._id,
+              },
+            },
+          }, { new: true }, (error, newResult) => {
+            if (error) {
+              return callback(err, null);
+            }
+            return callback(null, newResult);
+          });
+        } else {
+          return callback(null, result);
+        }
       });
     },
   ];
@@ -112,7 +102,7 @@ router.put('/:id', (req, res) => {
             userId: req.user._id,
           },
         },
-      }, (err, result) => {
+      }, { new: true }, (err, result) => {
         if (err) {
           return callback(err, null);
         }
@@ -139,10 +129,12 @@ router.put('/:id', (req, res) => {
         success: false,
         err,
       });
+    } else if (req.query.action === 'LIKE') {
+      res.json(ResponseTemplate.success('Content Liked', { result }));
+    } else if (req.query.action === 'COMMENT') {
+      res.json(ResponseTemplate.success('COMMENTED SUCCESSFULLY', { result }));
     } else {
-      res.json({
-        result,
-      });
+      res.json(ResponseTemplate.success('Unknown action', null));
     }
   });
 });
