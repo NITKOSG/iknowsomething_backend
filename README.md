@@ -15,22 +15,29 @@ just add your mongodb url in the config.js file.
 npm install
 ```
 
-* Run the following command in the project directory to run the server in development mode
+* Run the following command in the project directory to run the server in development mode in linux
 ```bashu online thodi der mein
 
 npm run dev
 ```
 
-* To generate the Swagger API Docs, run
+* To generate the Swagger API Docs in linux , run
 ```bash
 npm run dev_gen
 ```
 
-# To run using docker-compose:
+* To run the above commands in windows, type:
+```bash
+npm run dev_win
+npm run dev_win_gen
+```
+
+## To run using docker-compose:
 * Install Docker and then run:
 ```bash
 docker-compose up
 ```
+you will need to write mongo container if your are not using MLAB.
 
 # Features to be added in the near future:
 
