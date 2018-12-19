@@ -28,7 +28,7 @@ router.post('/login', (req, res) => {
     },
 
     (user, callback) => {
-      if (user.email.split('@')[1] !== 'nitkkr.ac.in') {
+      if (user.email.split('@')[1] !== 'nitkkr.ac.in' && config.app.nitkkr_domain_email) {
         return callback('Use NIT KKR domain email only', null);
       }
       return callback(null, user);
@@ -44,8 +44,10 @@ router.post('/login', (req, res) => {
           return callback(err, null);
         }
         if (!usr) {
-          // eslint-disable-next-line
-          user.rollNo = user.email.split('@')[0].split('_')[1];
+          if (config.app.nitkkr_domain_email) {
+            // eslint-disable-next-line
+            user.rollNo = user.email.split('@')[0].split('_')[1];
+          }
           authController.createUser(user, (err1, newUser) => {
             if (err1) {
               logger.error(err1);
@@ -108,7 +110,9 @@ router.post('/onboard', (req, res) => {
         }, config.app.WEB_TOKEN_SECRET, {
           expiresIn: config.app.jwt_expiry_time,
         });
-        res.json(ResponseTemplate.success('On boarded successfully', { token }));
+        res.json(ResponseTemplate.success('On boarded successfully', {
+          token,
+        }));
       });
     }
   });
