@@ -85,7 +85,6 @@ router.get('/:id', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  console.log(req.user);
   const task = [
     (callback) => {
       Blog.findByIdAndUpdate(req.params.id, {
@@ -135,14 +134,9 @@ router.put('/:id', (req, res) => {
   async.waterfall(taskDecide(req.query.action), (err, result) => {
     if (err) {
       logger.error(err);
-      res.json({
-        success: false,
-        err,
-      });
+      res.json(ResponseTemplate.error(404, 'Some error occured while saving the blog'));
     } else {
-      res.json({
-        result,
-      });
+      res.json(ResponseTemplate.success('Action created Successfully'));
     }
   });
 });
