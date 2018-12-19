@@ -11,11 +11,3 @@ services:
       - .:/app
     ports:
       - 8000:8000
-  mongo:
-    image: mongo
-    volumes:
-      - storedData:/data/db
-      - configData:/data/configdb
-volumes:
-  storedData:
-  configData:

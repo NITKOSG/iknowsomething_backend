@@ -101,7 +101,7 @@ router.post('/onboard', (req, res) => {
           branch: req.body.data.branch.split('_')[1],
           course: req.body.data.branch.split('_')[0],
         },
-      }, (error, modifiedUser) => {
+      }, { new: true }, (error, modifiedUser) => {
         if (error) {
           res.json(ResponseTemplate.error(401, 'Some error occurred while onboarding'));
         }

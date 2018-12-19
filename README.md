@@ -6,20 +6,38 @@ This would be a social network for nit kkr where students can react out to other
 * Install nodejs for your os, to run the server, from 
 [download node.js](https://nodejs.org/en/download/)
 
+Note: You will need to make a config.js file in the project directory.
+It's structure is similar to [config.js gist url](https://gist.github.com/war-turtle/208fab08315bc627982c7b7d7b423a90).
+just add your mongodb url in the config.js file.
+
 * Run the following command in the project directory to install all the required packages
 ```bash
 npm install
 ```
 
-* Run the following command in the project directory to run the server in development mode
-```bash
+* Run the following command in the project directory to run the server in development mode in linux
+```bashu online thodi der mein
+
 npm run dev
 ```
 
-* To generate the Swagger API Docs, run
+* To generate the Swagger API Docs in linux , run
 ```bash
 npm run dev_gen
 ```
+
+* To run the above commands in windows, type:
+```bash
+npm run dev_win
+npm run dev_win_gen
+```
+
+## To run using docker-compose:
+* Install Docker and then run:
+```bash
+docker-compose up
+```
+you will need to write mongo container if your are not using MLAB.
 
 # Features to be added in the near future:
 
