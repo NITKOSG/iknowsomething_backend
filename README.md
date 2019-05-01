@@ -1,5 +1,7 @@
 # I know Something
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/NITKOSG/iknowsomething_backend.svg)](https://greenkeeper.io/)
+
 This would be a social network for nit kkr where students can react out to other with no problem and can get guidance in a new way.
 
 ## Steps to setup the API:
